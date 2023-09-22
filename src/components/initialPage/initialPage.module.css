@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    margin: auto;
+    height: 100vh;
+}
+
+
+
+.button {
+    text-align: center;
+    margin: 15px;
+    font-size: 60px;
+    width: 150px;
+    height: 150px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}

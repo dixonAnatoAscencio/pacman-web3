@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'arcadeClassic';
+  src: url(/src/assets/ARCADECLASSIC.TTF);
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  font-family: arcadeClassic, serif;
+  background-color: black;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

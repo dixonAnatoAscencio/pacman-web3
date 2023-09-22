@@ -1,0 +1,58 @@
+.space {
+    box-sizing: border-box;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*border: 1px greenyellow solid;*/
+}
+
+.wall {
+    box-sizing: border-box;
+    width: 14px;
+    height: 14px;
+    /*border: 1px red solid;*/
+}
+
+.dot {
+    width: 2px;
+    height: 2px;
+    background-color: wheat;
+}
+
+.bigDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ffb7ff;
+    animation-name: blinker;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(1.0,0,0,1.0);
+    animation-duration: 0.4s;
+}
+
+@keyframes blinker {
+    from {opacity: 1.0;}
+    to {opacity: 0;}
+}
+
+
+.death {
+    width: 14px;
+    height: 14px;
+    object-fit: none;
+    object-position: -664px -4px;
+    animation: 1s deathAnim steps(11);
+}
+
+@keyframes deathAnim {
+    from {
+        object-position: -489px -1px;
+    }
+    to {
+        object-position: -664px -1px;
+    }
+}
+
+

@@ -1,0 +1,75 @@
+@font-face {
+    font-family: 'arcadeClassic';
+    src: url(/src/assets/ARCADECLASSIC.TTF);
+    font-weight: 400;
+}
+
+
+.gameContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.map {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-image: url("/src/assets/sprites.png");
+    object-fit: none;
+    background-position: -400px 0;
+    background-size: 304%;
+}
+
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+}
+
+.button {
+    background: none;
+    font-family: arcadeClassic, serif;
+    font-size: 34px;
+    color: white;
+    border: none;
+    word-spacing: 5px;
+}
+
+.button:hover{
+    transform: scale(1.1);
+}
+
+.buttonContainer {
+    height: 40px;
+}
+
+.score {
+    border: 2px blue dotted;
+    box-sizing: border-box;
+    border-radius: 5px;
+    text-align: center;
+    width: 80px;
+    height: 434px;
+    padding: 35px;
+    margin: 20px;
+    color: #f982ff;
+    font-family: arcadeClassic, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scoreText {
+    font-family: arcadeClassic, serif;
+    text-align: center;
+    color: white;
+    font-size: 34px;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+}
