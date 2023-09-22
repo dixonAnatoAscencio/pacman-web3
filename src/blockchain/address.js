@@ -7,9 +7,9 @@ export const SupportedChainId = {
 
 export const TokenSale = {
   [SupportedChainId.POLYGON_MAINNET]: "",
-  [SupportedChainId.POLYGON_TESTNET]: "0x6656Bb82C4FDFaC99EA63dF82FAFAb33F0aB3Ca4",
+  [SupportedChainId.POLYGON_TESTNET]: "0xB66A412ba4ea0949d8AeFCe79735a25c5962496a",
   [SupportedChainId.POLYGON_HEX_MAINNET]: "",
-  [SupportedChainId.POLYGON_HEX_TESTNET]: "0x6656Bb82C4FDFaC99EA63dF82FAFAb33F0aB3Ca4",
+  [SupportedChainId.POLYGON_HEX_TESTNET]: "0xB66A412ba4ea0949d8AeFCe79735a25c5962496a",
 };
 
 export default module.exports = {

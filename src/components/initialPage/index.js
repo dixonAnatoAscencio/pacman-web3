@@ -10,7 +10,6 @@ import { injected } from "../../blockchain/metamaskConnector";
 import { useNavigate } from "react-router-dom";
 
 
-
 const InitialPage = () => {
   const navigate = useNavigate();
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -20,7 +19,7 @@ const InitialPage = () => {
     useWeb3React();
   const selectedNetwork = 80001;
 
-  let pancmanGameAddress = "0x6656Bb82C4FDFaC99EA63dF82FAFAb33F0aB3Ca4";
+  let pancmanGameAddress = "0xB66A412ba4ea0949d8AeFCe79735a25c5962496a";
   let pancmanGameContract;
 
   if (account && library) {
@@ -129,17 +128,7 @@ const InitialPage = () => {
 
   useEffect(() => {
     if (account && library) {
-      /*
-      isGameStarted().then((res) => {
-        console.log("isGameStarted", res);
-        if (res === true) {
-          //setButtonDisabled(true);
-        } else {
-          //setButtonDisabled(false);
-        }
-      });
-      */
-
+  
       isGameStarted().then((res) => {
         console.log("isGameStarted", res);
         if (res === true) {
@@ -149,22 +138,13 @@ const InitialPage = () => {
         }
       });
 
-
-
-
       getGamePrice().then((res) => {
         setGamePrice(res);
         console.log("getGamePrice", res);
       }
       );
-
-
-
-
-
-
     }
-  }, [activate, deactivate, chainId]);
+  }, [activate, chainId, account]);
 
   const dispatch = useDispatch();
 
@@ -179,15 +159,14 @@ const InitialPage = () => {
 
     playGame(gamePrice).then((res) => {
       console.log("playGame", res);
-      if (!buttonDisabled) {
+      if (res !== undefined) {
         dispatch(gameStart());
+        navigate("/game");
       } else {
         e.preventDefault()
         console.log("Please connect your wallet to MetaMask before starting the game.");
         //alert("Please connect your wallet to MetaMask before starting the game.");
       }
-  
-      navigate("/game");
     });
 
     
