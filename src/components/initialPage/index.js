@@ -7,31 +7,24 @@ import { NavLink } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
 import PacManGameAbi from "../../blockchain/abi/PacManGame.json";
 import { injected } from "../../blockchain/metamaskConnector";
+import { useNavigate } from "react-router-dom";
 
-/*
-// Ejemplo de función para obtener la cuenta de MetaMask
-async function getAccount() {
-  if (typeof window !== "undefined" && window.ethereum) {
-    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-    return accounts[0];
-  }
-  return null;
-}
-*/
+
 
 const InitialPage = () => {
+  const navigate = useNavigate();
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [gamePrice, setGamePrice] = useState();
 
   const { active, account, library, activate, deactivate, chainId } =
-  useWeb3React();
+    useWeb3React();
   const selectedNetwork = 80001;
 
   let pancmanGameAddress = "0x6656Bb82C4FDFaC99EA63dF82FAFAb33F0aB3Ca4";
   let pancmanGameContract;
 
   if (account && library) {
-    pancmanGameContract = new library.eth.Contract(PacManGameAbi, pancmanGameAddress).methods;
-    console.log("loaded pancmanGameContract", pancmanGameContract.address);
+    pancmanGameContract = new library.eth.Contract(PacManGameAbi, pancmanGameAddress);
   }
 
   const toHex = (num) => {
@@ -105,7 +98,7 @@ const InitialPage = () => {
   }
 
   const isGameStarted = async () => {
-    return pancmanGameContract
+    return pancmanGameContract.methods
       .gameStarted()
       .call()
       .then((res) => {
@@ -114,79 +107,101 @@ const InitialPage = () => {
       });
   };
 
-  useEffect(() => {
+  const getGamePrice = async () => {
+    return pancmanGameContract.methods
+      .playPrice()
+      .call()
+      .then((res) => {
+        console.log("res", res);
+        return res;
+      });
+  };
 
+  const playGame = async (gamePrice) => {
+    return pancmanGameContract.methods
+      .play()
+      .send({ from: account, value: gamePrice })
+      .then((res) => {
+        console.log("res", res);
+        return res;
+      });
+  };
+
+  useEffect(() => {
     if (account && library) {
+      /*
       isGameStarted().then((res) => {
         console.log("isGameStarted", res);
-        if (res) {
+        if (res === true) {
+          //setButtonDisabled(true);
+        } else {
+          //setButtonDisabled(false);
+        }
+      });
+      */
+
+      isGameStarted().then((res) => {
+        console.log("isGameStarted", res);
+        if (res === true) {
           setButtonDisabled(false);
         } else {
           setButtonDisabled(true);
         }
       });
-    }
-
-  
 
 
-    /*
-    if (window.ethereum && window.ethereum.selectedAddress) {
-      setConnected(true);
-      setButtonDisabled(false);
-    } else {
-      setConnected(false);
-      setButtonDisabled(true);
-    }
-    */
-  }, []);
 
-  /*
-  const connectButtonOnClick = async () => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      try {
-        const account = await getAccount();
-        if (account) {
-          console.log("Connected to MetaMask with account:", account);
-          setConnected(true);
-          setButtonDisabled(false);
-          // Realiza acciones adicionales después de la conexión
-        } else {
-          console.error("No MetaMask account found.");
-          setConnected(false);
-          setButtonDisabled(true);
-        }
-      } catch (error) {
-        console.error("Error connecting to Metamask:", error);
-        setConnected(false);
-        setButtonDisabled(true);
+
+      getGamePrice().then((res) => {
+        setGamePrice(res);
+        console.log("getGamePrice", res);
       }
-    } else {
-      console.error("Metamask is not installed or not detected.");
-      setConnected(false);
-      setButtonDisabled(true);
+      );
+
+
+
+
+
+
     }
-  };
-  */
+  }, [activate, deactivate, chainId]);
 
   const dispatch = useDispatch();
 
+  const handleClick = async (e) => {
+
+    /*
+    const { linkDisabled } = this.state
+    if(linkDisabled) e.preventDefault()
+    */
+
+
+
+    playGame(gamePrice).then((res) => {
+      console.log("playGame", res);
+      if (!buttonDisabled) {
+        dispatch(gameStart());
+      } else {
+        e.preventDefault()
+        console.log("Please connect your wallet to MetaMask before starting the game.");
+        //alert("Please connect your wallet to MetaMask before starting the game.");
+      }
+  
+      navigate("/game");
+    });
+
+    
+}
+
   return (
     <div className={style.container}>
-      <NavLink
-        onClick={() => {
-          if (!buttonDisabled) {
-            dispatch(gameStart());
-          } else {
-            alert("Please connect your wallet to MetaMask before starting the game.");
-          }
-        }}
-        to="/game"
+      <div
+        onClick={handleClick}
         className={`${style.button} ${buttonDisabled ? style.disabledButton : ""}`}
       >
         {" "}
         START GAME WEB3 PACMAN
-      </NavLink>
+      </div>
 
       <h1 onClick={active ? disconnect : connectMetamaks} style={{ color: "white", cursor: "pointer", padding: "50px" }}>
         {active ? `Connected: ${getWalletAbreviation(account)}` : "Connect Metamask"}
