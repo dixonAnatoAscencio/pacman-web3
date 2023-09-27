@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from "./gamePage.module.css"
 import GameLine from "./gameLine"
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   changeDirection,
   continueGame,
@@ -15,11 +15,24 @@ import {
   ghostsMoving,
   endGame, gameStart
 } from "../../redux/actions/actions";
-
+import { useWeb3React } from "@web3-react/core";
+import PacManGameAbi from "../../blockchain/abi/PacManGame.json";
+const apiUrl = "https://packman-api.vercel.app/updateWinnerScore"
 
 const GamePage = () => {
+  const { active, account, library, activate, deactivate, chainId } =
+    useWeb3React();
+  const selectedNetwork = 80001;
+
+  let pancmanGameAddress = "0x5b86F39d4333d6825b1a038C438a5753AB056247";
+  let pancmanGameContract;
+
+  if (account && library) {
+    pancmanGameContract = new library.eth.Contract(PacManGameAbi, pancmanGameAddress);
+  }
+
   const dispatch = useDispatch()
-  const {gameMap, score, highscore, pacman, gameState} = useSelector((state) => state)
+  const { gameMap, score, highscore, pacman, gameState } = useSelector((state) => state)
 
   const intervalRef = useRef(null)
   const ghostsIntervalRef = useRef(null)
@@ -89,7 +102,7 @@ const GamePage = () => {
     })
   }, [])
 
-//setup highscore
+  //setup highscore
   useEffect(() => {
     if (score > highscore) {
       dispatch(setHighscore())
@@ -111,6 +124,36 @@ const GamePage = () => {
     }
   }, [score])
 
+  const isGameStarted = async () => {
+    return pancmanGameContract.methods
+      .gameStarted()
+      .call()
+      .then((res) => {
+        console.log("res", res);
+        return res;
+      });
+  };
+
+  useEffect(() => {
+    if (account && library) {
+
+      isGameStarted().then((res) => {
+        console.log("isGameStarted", res);
+
+      });
+    }
+  }, [activate, chainId, account]);
+
+  const getHighScore = async () => {
+    return pancmanGameContract.methods
+      .highScore()
+      .call()
+      .then((res) => {
+        console.log("res", res);
+        return res;
+      });
+  };
+
   useEffect(() => {
     if (gameMap.filter(line => {
       return line.filter(el => {
@@ -118,6 +161,27 @@ const GamePage = () => {
       }).length > 0
     }).length > 0) {
       console.log('PacMan is dead')
+      getHighScore().then((res) => {
+        console.log(res)
+        console.log(highscore)
+        if (Number(highscore) > Number(res)) {
+          console.log('New highscore!')
+          fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ winnerScore: highscore, winnerAddress: account }),
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        }
+      })
       dispatch(endGame())
     }
   }, [gameMap.filter(line => {
@@ -133,7 +197,7 @@ const GamePage = () => {
           game score <p className={style.scoreText}>{score}</p>
         </div>
         <div className={style.map}>
-          {gameMap.map((line, index) => <GameLine tiles={line} key={index}/>)}
+          {gameMap.map((line, index) => <GameLine tiles={line} key={index} />)}
         </div>
         <div className={style.score}>
           high score <p className={style.scoreText}>{highscore}</p>
