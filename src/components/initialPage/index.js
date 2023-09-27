@@ -19,7 +19,7 @@ const InitialPage = () => {
     useWeb3React();
   const selectedNetwork = 80001;
 
-  let pancmanGameAddress = "0xB66A412ba4ea0949d8AeFCe79735a25c5962496a";
+  let pancmanGameAddress = "0x5b86F39d4333d6825b1a038C438a5753AB056247";
   let pancmanGameContract;
 
   if (account && library) {
