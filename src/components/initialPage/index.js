@@ -19,7 +19,7 @@ const InitialPage = () => {
     useWeb3React();
   const selectedNetwork = 80001;
 
-  let pancmanGameAddress = "0x5b86F39d4333d6825b1a038C438a5753AB056247";
+  let pancmanGameAddress = "0x36858A3C5D7afCf0416DC13cfb618e3098976Ee9";
   let pancmanGameContract;
 
   if (account && library) {
@@ -127,8 +127,13 @@ const InitialPage = () => {
   };
 
   useEffect(() => {
+
+    if (chainId !== selectedNetwork) {
+      switchNetwork();
+    }
+
     if (account && library) {
-  
+
       isGameStarted().then((res) => {
         console.log("isGameStarted", res);
         if (res === true) {
@@ -150,27 +155,31 @@ const InitialPage = () => {
 
   const handleClick = async (e) => {
 
-    /*
-    const { linkDisabled } = this.state
-    if(linkDisabled) e.preventDefault()
-    */
+    if (account) {
 
 
 
-    playGame(gamePrice).then((res) => {
-      console.log("playGame", res);
-      if (res !== undefined) {
-        dispatch(gameStart());
-        navigate("/game");
-      } else {
-        e.preventDefault()
-        console.log("Please connect your wallet to MetaMask before starting the game.");
-        //alert("Please connect your wallet to MetaMask before starting the game.");
-      }
-    });
+      /*
+      const { linkDisabled } = this.state
+      if(linkDisabled) e.preventDefault()
+      */
 
-    
-}
+
+
+      playGame(gamePrice).then((res) => {
+        console.log("playGame", res);
+        if (res !== undefined) {
+          dispatch(gameStart());
+          navigate("/game");
+        } else {
+          e.preventDefault()
+          console.log("Please connect your wallet to MetaMask before starting the game.");
+          //alert("Please connect your wallet to MetaMask before starting the game.");
+        }
+      });
+    }
+
+  }
 
   return (
     <div className={style.container}>

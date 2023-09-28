@@ -24,7 +24,7 @@ const GamePage = () => {
     useWeb3React();
   const selectedNetwork = 80001;
 
-  let pancmanGameAddress = "0x5b86F39d4333d6825b1a038C438a5753AB056247";
+  let pancmanGameAddress = "0x36858A3C5D7afCf0416DC13cfb618e3098976Ee9";
   let pancmanGameContract;
 
   if (account && library) {
@@ -141,6 +141,11 @@ const GamePage = () => {
         console.log("isGameStarted", res);
 
       });
+
+      getHighScore().then((res) => {
+        dispatch(setHighscore())
+        localStorage.setItem('highscore', res)
+      })
     }
   }, [activate, chainId, account]);
 
