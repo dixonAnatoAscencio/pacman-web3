@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import style from "./gamePage.module.css"
 import GameLine from "./gameLine"
 import { useDispatch, useSelector } from "react-redux";
@@ -172,6 +173,7 @@ const GamePage = () => {
             .then(response => response.json())
             .then(data => {
               console.log('Success:', data);
+              toast.success('New highscore!')
             })
             .catch((error) => {
               console.error('Error:', error);
@@ -188,6 +190,7 @@ const GamePage = () => {
 
   return (
     <div className={style.mainContainer}>
+      <div><Toaster /></div>
       <div className={style.gameContainer}>
         <div className={style.score}>
           game score <p className={style.scoreText}>{score}</p>

@@ -8,6 +8,7 @@ import { useWeb3React } from "@web3-react/core";
 import PacManGameAbi from "../../blockchain/abi/PacManGame.json";
 import { injected } from "../../blockchain/metamaskConnector";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const InitialPage = () => {
@@ -123,6 +124,9 @@ const InitialPage = () => {
       .then((res) => {
         console.log("res", res);
         return res;
+      }).catch((ex) => {
+        toast.error(ex.message);
+        return undefined;
       });
   };
 
@@ -157,10 +161,10 @@ const InitialPage = () => {
 
     if (account) {
 
-      dispatch(gameStart());
-      navigate("/game");
+      //dispatch(gameStart());
+      //navigate("/game");
 
-      /*
+
       playGame(gamePrice).then((res) => {
         console.log("playGame", res);
         if (res !== undefined) {
@@ -172,13 +176,14 @@ const InitialPage = () => {
           //alert("Please connect your wallet to MetaMask before starting the game.");
         }
       });
-      */
+
     }
 
   }
 
   return (
     <div className={style.container}>
+      <div><Toaster /></div>
       <div
         onClick={handleClick}
         className={`${style.button} ${buttonDisabled ? style.disabledButton : ""}`}
