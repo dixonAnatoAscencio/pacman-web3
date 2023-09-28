@@ -60,11 +60,27 @@ const GamePage = () => {
       clearInterval(intervalRef.current)
     }
   }, [pacman.direction])
+  useEffect(() => {
+    const unloadCallback = (event) => {
+      console.log("unloadCallback");
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
 
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
 
   useEffect(() => {
     switch (gameState) {
       case "GAME":
+        getHighScore().then((res) => {
+          console.log({ res })
+          //score = Number(res);
+          //dispatch(setHighscore())
+          localStorage.setItem('highscore', Number(res))
+        })
         ghostsIntervalRef.current = setInterval(() => dispatch(ghostsMoving()), 200)
         break
       case "END":
@@ -123,31 +139,6 @@ const GamePage = () => {
       // dispatch(continueGame())
     }
   }, [score])
-
-  const isGameStarted = async () => {
-    return pancmanGameContract.methods
-      .gameStarted()
-      .call()
-      .then((res) => {
-        console.log("res", res);
-        return res;
-      });
-  };
-
-  useEffect(() => {
-    if (account && library) {
-
-      isGameStarted().then((res) => {
-        console.log("isGameStarted", res);
-
-      });
-
-      getHighScore().then((res) => {
-        dispatch(setHighscore())
-        localStorage.setItem('highscore', res)
-      })
-    }
-  }, [activate, chainId, account]);
 
   const getHighScore = async () => {
     return pancmanGameContract.methods

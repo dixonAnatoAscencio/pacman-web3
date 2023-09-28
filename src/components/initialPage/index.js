@@ -157,15 +157,10 @@ const InitialPage = () => {
 
     if (account) {
 
-
+      dispatch(gameStart());
+      navigate("/game");
 
       /*
-      const { linkDisabled } = this.state
-      if(linkDisabled) e.preventDefault()
-      */
-
-
-
       playGame(gamePrice).then((res) => {
         console.log("playGame", res);
         if (res !== undefined) {
@@ -177,6 +172,7 @@ const InitialPage = () => {
           //alert("Please connect your wallet to MetaMask before starting the game.");
         }
       });
+      */
     }
 
   }
