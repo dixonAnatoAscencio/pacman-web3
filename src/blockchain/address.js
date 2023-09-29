@@ -5,7 +5,7 @@ export const SupportedChainId = {
   POLYGON_HEX_TESTNET: "0x13881",
 };
 
-export const TokenSale = {
+export const PacmanAddressess = {
   [SupportedChainId.POLYGON_MAINNET]: "",
   [SupportedChainId.POLYGON_TESTNET]: "0x36858A3C5D7afCf0416DC13cfb618e3098976Ee9",
   [SupportedChainId.POLYGON_HEX_MAINNET]: "",
@@ -13,6 +13,6 @@ export const TokenSale = {
 };
 
 export default module.exports = {
-  SupportedChainId,
-  TokenSale,
+  SupportedChainId: SupportedChainId,
+  PacmanAddressess: PacmanAddressess,
 };
