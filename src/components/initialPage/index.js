@@ -1,14 +1,12 @@
-import { useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import { gameStart } from "../../redux/actions/actions";
-import style from "./initialPage.module.css";
-import { NavLink } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PacManGameAbi from "../../blockchain/abi/PacManGame.json";
 import { injected } from "../../blockchain/metamaskConnector";
-import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
+import { gameStart } from "../../redux/actions/actions";
+import style from "./initialPage.module.css";
 
 
 const InitialPage = () => {
@@ -181,6 +179,10 @@ const InitialPage = () => {
 
   }
 
+  function navigateToLeaderboard() {
+    navigate("/leaderboard");
+  }
+
   return (
     <div className={style.container}>
       <div><Toaster /></div>
@@ -194,6 +196,10 @@ const InitialPage = () => {
 
       <h1 onClick={active ? disconnect : connectMetamaks} style={{ color: "white", cursor: "pointer", padding: "50px" }}>
         {active ? `Connected: ${getWalletAbreviation(account)}` : "Connect Metamask"}
+      </h1>
+
+      <h1 onClick={navigateToLeaderboard} style={{ color: "white", cursor: "pointer" }}>
+        Leaderboard
       </h1>
     </div>
   );
