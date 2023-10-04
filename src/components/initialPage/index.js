@@ -8,7 +8,6 @@ import { injected } from "../../blockchain/metamaskConnector";
 import { gameStart } from "../../redux/actions/actions";
 import style from "./initialPage.module.css";
 
-
 const InitialPage = () => {
   const navigate = useNavigate();
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -159,10 +158,11 @@ const InitialPage = () => {
 
     if (account) {
 
-      //dispatch(gameStart());
-      //navigate("/game");
+      dispatch(gameStart());
+      navigate("/game");
 
 
+      /*
       playGame(gamePrice).then((res) => {
         console.log("playGame", res);
         if (res !== undefined) {
@@ -174,6 +174,7 @@ const InitialPage = () => {
           //alert("Please connect your wallet to MetaMask before starting the game.");
         }
       });
+      */
 
     }
 

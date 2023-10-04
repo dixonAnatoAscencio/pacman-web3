@@ -23,6 +23,13 @@
     background-size: 304%;
 }
 
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .mainContainer {
     display: flex;
     flex-direction: column;
@@ -41,7 +48,7 @@
     word-spacing: 5px;
 }
 
-.button:hover{
+.button:hover {
     transform: scale(1.1);
 }
 
@@ -72,4 +79,44 @@
     font-size: 34px;
     writing-mode: vertical-lr;
     text-orientation: upright;
+}
+
+
+/************************************************************/
+.rankContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid #c2c2c2;
+    color: #c2c2c2;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+    font-size: 1.5rem;
+    color: 'white';
+}
+
+tr:nth-child(even) {
+    background-color: #545454;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
 }

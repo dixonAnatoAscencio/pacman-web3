@@ -24,8 +24,9 @@ const GamePage = () => {
   const { active, account, library, activate, deactivate, chainId } =
     useWeb3React();
   const selectedNetwork = 80001;
+  const [rankList, setRankList] = useState([]);
 
-  let pancmanGameAddress = "0xC8Ddbc3519a16E366ed7a45ac9A513c1281B02B7";
+  let pancmanGameAddress = "0x0000fF0d724a25FBBcB1504642CF1713D3c13fac";
   let pancmanGameContract;
 
   if (account && library) {
@@ -180,6 +181,30 @@ const GamePage = () => {
             });
         }
       })
+
+      getRanking().then((res1) => {
+        console.log("getRanking", res1);
+
+        let rankList = [];
+        for (let i = 0; i < res1.length; i++) {
+          console.log("res1[i]", res1[i]);
+
+          rankList.push({
+            address: res1[i][0],
+            score: res1[i][1],
+          });
+
+        }
+
+
+        rankList.sort((a, b) => {
+          return b.score - a.score;
+        });
+        console.log("rankList", rankList);
+        setRankList(rankList);
+
+
+      });
       dispatch(endGame())
     }
   }, [gameMap.filter(line => {
@@ -188,23 +213,100 @@ const GamePage = () => {
     }).length > 0
   }).length > 0])
 
+  function getRankEmoji(rank) {
+    switch (rank) {
+      case 1:
+        return "🥇";
+      case 2:
+        return "🥈";
+      case 3:
+        return "🥉";
+      default:
+        return "";
+    }
+  }
+
+  const getRanking = async () => {
+    return pancmanGameContract.methods
+      .getRanking()
+      .call()
+      .then((res) => {
+        return res;
+      });
+  };
+  useEffect(() => {
+
+    if (account && library) {
+      getRanking().then((res1) => {
+        console.log("getRanking", res1);
+
+        let rankList = [];
+        for (let i = 0; i < res1.length; i++) {
+          console.log("res1[i]", res1[i]);
+
+          rankList.push({
+            address: res1[i][0],
+            score: res1[i][1],
+          });
+
+        }
+
+
+        rankList.sort((a, b) => {
+          return b.score - a.score;
+        });
+        console.log("rankList", rankList);
+        setRankList(rankList);
+
+
+      });
+    }
+  }, [activate, chainId, account]);
+
   return (
-    <div className={style.mainContainer}>
-      <div><Toaster /></div>
-      <div className={style.gameContainer}>
-        <div className={style.score}>
-          game score <p className={style.scoreText}>{score}</p>
+    <div className={style.main}>
+      <div className={style.mainContainer}>
+        <div><Toaster /></div>
+        <div className={style.gameContainer}>
+          <div className={style.score}>
+            game score <p className={style.scoreText}>{score}</p>
+          </div>
+          <div className={style.map}>
+            {gameMap.map((line, index) => <GameLine tiles={line} key={index} />)}
+          </div>
+          <div className={style.score}>
+            high score <p className={style.scoreText}>{highscore}</p>
+          </div>
         </div>
-        <div className={style.map}>
-          {gameMap.map((line, index) => <GameLine tiles={line} key={index} />)}
-        </div>
-        <div className={style.score}>
-          high score <p className={style.scoreText}>{highscore}</p>
-        </div>
+        <div className={style.buttonContainer}>{
+          gameState === "END" && <button className={style.button} onClick={refreshPage}> back to main screen </button>
+        }</div>
       </div>
-      <div className={style.buttonContainer}>{
-        gameState === "END" && <button className={style.button} onClick={refreshPage}> back to main screen </button>
-      }</div>
+
+      <div className={style.rankContainer}>
+        <h1 style={{ color: 'white' }}>Leaderboard</h1>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Wallet</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rankList.map((row, index) => {
+              return (
+                <tr key={index}>
+                  {<td>{index + 1}  {getRankEmoji(index + 1)}</td>}
+                  <td>{row.address}</td>
+                  <td>{row.score}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
     </div>
   );
