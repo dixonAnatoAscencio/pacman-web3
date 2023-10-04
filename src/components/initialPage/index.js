@@ -7,6 +7,7 @@ import PacManGameAbi from "../../blockchain/abi/PacManGame.json";
 import { injected } from "../../blockchain/metamaskConnector";
 import { gameStart } from "../../redux/actions/actions";
 import style from "./initialPage.module.css";
+import Pepe from "./pepe.jpg"
 
 const InitialPage = () => {
   const navigate = useNavigate();
@@ -186,6 +187,7 @@ const InitialPage = () => {
 
   return (
     <div className={style.container}>
+    
       <div><Toaster /></div>
       <div
         onClick={handleClick}

@@ -1,16 +1,29 @@
+/* En tu archivo InitialPage.module.css */
+
 .container {
+    background-image: url('./pepe.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    color: white;
+  
+    /* Añade estos estilos para centrar el contenedor */
+    position: relative;
+  }
+  
+  /* Ajusta el ancho a tu necesidad, esto es solo un ejemplo */
+  .container-inner {
     width: 500px;
     margin: auto;
-    height: 100vh;
-}
-
-
-
-.button {
+    text-align: center;
+  }
+  
+  .button {
     text-align: center;
     margin: 15px;
     font-size: 60px;
@@ -23,8 +36,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.button:hover {
+  }
+  
+  .button:hover {
     transform: scale(1.05);
-}
+  }
+  
