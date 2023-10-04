@@ -1,5 +1,6 @@
 import './App.css';
 import GamePage from "../src/components/gamePage"
+import LeaderboardPage from "./components/leaderboardPage"
 import {Route, Routes, BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux"
 import {store} from "./redux/store"
@@ -12,6 +13,7 @@ function App() {
           <Routes>
             <Route path="/" element={<InitialPage/>}/>
             <Route path="/game" element={<GamePage/>}/>
+            <Route path="/leaderboard" element={<LeaderboardPage/>}/>
           </Routes>
         </Provider>
       </BrowserRouter>
