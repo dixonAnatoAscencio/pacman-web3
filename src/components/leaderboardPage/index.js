@@ -9,7 +9,7 @@ const LeaderboardPage = () => {
     useWeb3React();
   const selectedNetwork = 80001;
 
-  let pancmanGameAddress = "0xC8Ddbc3519a16E366ed7a45ac9A513c1281B02B7";
+  let pancmanGameAddress = "0x0000fF0d724a25FBBcB1504642CF1713D3c13fac";
   let pancmanGameContract;
 
   if (account && library) {
