@@ -283,7 +283,7 @@ const GamePage = () => {
         }</div>
       </div>
 
-      <div className={style.rankContainer}>
+      <div className={style.rankContainer }>
         <h1 style={{ color: 'white' }}>Leaderboard</h1>
 
         <table>

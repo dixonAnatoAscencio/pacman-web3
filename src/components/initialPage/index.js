@@ -1,18 +1,19 @@
 import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PacManGameAbi from "../../blockchain/abi/PacManGame.json";
 import { injected } from "../../blockchain/metamaskConnector";
 import { gameStart } from "../../redux/actions/actions";
 import style from "./initialPage.module.css";
-import Pepe from "./pepe.jpg"
+import Pepe from "./pepe.jpg";
 
 const InitialPage = () => {
   const navigate = useNavigate();
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [gamePrice, setGamePrice] = useState();
+  const [isSpacePressed, setIsSpacePressed] = useState(false);
 
   const { active, account, library, activate, deactivate, chainId } =
     useWeb3React();
@@ -22,7 +23,10 @@ const InitialPage = () => {
   let pancmanGameContract;
 
   if (account && library) {
-    pancmanGameContract = new library.eth.Contract(PacManGameAbi, pancmanGameAddress);
+    pancmanGameContract = new library.eth.Contract(
+      PacManGameAbi,
+      pancmanGameAddress
+    );
   }
 
   const toHex = (num) => {
@@ -71,24 +75,19 @@ const InitialPage = () => {
     }
   }, [active]);
 
-  async function connectMetamaks() {
+  async function connectMetamask() {
     try {
-      if (window.ethereum && window.ethereum.networkVersion !== selectedNetwork.toString()) {
+      if (
+        window.ethereum &&
+        window.ethereum.networkVersion !== selectedNetwork.toString()
+      ) {
         switchNetwork();
       }
 
-      activate(injected, undefined, true).then(
-        (res) => {
-          localStorage.setItem("isWalletConnected", "true");
-          localStorage.setItem("connector", "injected");
-          setButtonDisabled(false);
-        },
-        (err) => {
-          console.log("Please install Metamask");
-          console.log(err);
-          setButtonDisabled(true);
-        }
-      );
+      await activate(injected, undefined, true);
+      localStorage.setItem("isWalletConnected", "true");
+      localStorage.setItem("connector", "injected");
+      setButtonDisabled(false);
     } catch (ex) {
       console.log("Please install Metamask");
       console.log(ex);
@@ -122,20 +121,58 @@ const InitialPage = () => {
       .then((res) => {
         console.log("res", res);
         return res;
-      }).catch((ex) => {
-        toast.error(ex.message);
+      })
+      .catch((ex) => {
+        console.error(ex.message);
         return undefined;
       });
   };
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === "Space") {
+        setIsSpacePressed(true);
+      }
+    };
 
+    const handleKeyUp = (e) => {
+      if (e.code === "Space") {
+        setIsSpacePressed(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSpacePressed && account) {
+      playGame(gamePrice).then((res) => {
+        console.log("playGame", res);
+        if (res !== undefined) {
+          dispatch(gameStart());
+          navigate("/game");
+        } else {
+          console.log(
+            "Please connect your wallet to MetaMask before starting the game."
+          );
+          //alert("Please connect your wallet to MetaMask before starting the game.");
+        }
+      });
+    }
+  }, [isSpacePressed]);
+
+  useEffect(() => {
     if (chainId !== selectedNetwork) {
       switchNetwork();
     }
 
     if (account && library) {
-
       isGameStarted().then((res) => {
         console.log("isGameStarted", res);
         if (res === true) {
@@ -148,61 +185,38 @@ const InitialPage = () => {
       getGamePrice().then((res) => {
         setGamePrice(res);
         console.log("getGamePrice", res);
-      }
-      );
+      });
     }
   }, [activate, chainId, account]);
 
   const dispatch = useDispatch();
 
-  const handleClick = async (e) => {
-
-    if (account) {
-
-      dispatch(gameStart());
-      navigate("/game");
-
-
-      /*
-      playGame(gamePrice).then((res) => {
-        console.log("playGame", res);
-        if (res !== undefined) {
-          dispatch(gameStart());
-          navigate("/game");
-        } else {
-          e.preventDefault()
-          console.log("Please connect your wallet to MetaMask before starting the game.");
-          //alert("Please connect your wallet to MetaMask before starting the game.");
-        }
-      });
-      */
-
-    }
-
-  }
-
-  function navigateToLeaderboard() {
-    navigate("/leaderboard");
-  }
-
   return (
     <div className={style.container}>
-    
-      <div><Toaster /></div>
+      <div>
+        <Toaster />
+      </div>
       <div
-        onClick={handleClick}
-        className={`${style.button} ${buttonDisabled ? style.disabledButton : ""}`}
+        onClick={() => {
+          setIsSpacePressed(true);
+        }}
+        className={`${style.button} ${
+          buttonDisabled ? style.disabledButton : ""
+        }`}
       >
         {" "}
-        START GAME WEB3 PACMAN
+        <div style={{ color: "white" }} className={style.buttonText}>
+          Press Space to Start Game
+        </div>
       </div>
 
-      <h1 onClick={active ? disconnect : connectMetamaks} style={{ color: "white", cursor: "pointer", padding: "50px" }}>
-        {active ? `Connected: ${getWalletAbreviation(account)}` : "Connect Metamask"}
-      </h1>
-
-      <h1 onClick={navigateToLeaderboard} style={{ color: "white", cursor: "pointer" }}>
-        Leaderboard
+      <h1
+        onClick={active ? disconnect : connectMetamask}
+        style={{ color: "white", cursor: "pointer", padding: "60px" }}
+      >
+        {active
+          ? `Connected: ${getWalletAbreviation(account)}`
+          : "Connect Metamask"}
       </h1>
     </div>
   );

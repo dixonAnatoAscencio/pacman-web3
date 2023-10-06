@@ -1,26 +1,38 @@
 /* En tu archivo InitialPage.module.css */
 
 .container {
-    background-image: url('./pepe.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    position: relative;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: white;
-  
-    /* Añade estos estilos para centrar el contenedor */
-    position: relative;
+    overflow: hidden; /* Asegura que el contenido difuminado no sobresalga */
   }
   
-  /* Ajusta el ancho a tu necesidad, esto es solo un ejemplo */
+  .container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('./pepe.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(5px); /* Ajusta la cantidad de difuminado según tus preferencias */
+    z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+  }
+  
   .container-inner {
+    position: relative;
+    z-index: 1; /* Asegura que el título esté sobre el fondo difuminado */
     width: 500px;
     margin: auto;
     text-align: center;
+    background-color: rgba(255, 255, 255, 0.5); /* Color de fondo con opacidad para el difuminado */
+    padding: 20px; /* Ajusta según sea necesario */
   }
   
   .button {
