@@ -152,6 +152,9 @@ const InitialPage = () => {
 
   useEffect(() => {
     if (isSpacePressed && account) {
+      dispatch(gameStart());
+      navigate("/game");
+      /*
       playGame(gamePrice).then((res) => {
         console.log("playGame", res);
         if (res !== undefined) {
@@ -164,6 +167,7 @@ const InitialPage = () => {
           //alert("Please connect your wallet to MetaMask before starting the game.");
         }
       });
+      */
     }
   }, [isSpacePressed]);
 
@@ -200,9 +204,8 @@ const InitialPage = () => {
         onClick={() => {
           setIsSpacePressed(true);
         }}
-        className={`${style.button} ${
-          buttonDisabled ? style.disabledButton : ""
-        }`}
+        className={`${style.button} ${buttonDisabled ? style.disabledButton : ""
+          }`}
       >
         {" "}
         <div style={{ color: "white" }} className={style.buttonText}>
