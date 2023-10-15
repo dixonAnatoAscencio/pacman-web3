@@ -25,17 +25,20 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: #ffb7ff;
+    background-color: #0be22f;
+    background-image: url('/src/components/gamePage/gameLine/gameTile/pepecoin.png');
+    background-size: cover; /* Puedes ajustar esto según tus necesidades */
     animation-name: blinker;
     animation-iteration-count: infinite;
-    animation-timing-function: cubic-bezier(1.0,0,0,1.0);
+    animation-timing-function: cubic-bezier(1.0, 0, 0, 1.0);
     animation-duration: 0.4s;
 }
 
 @keyframes blinker {
-    from {opacity: 1.0;}
-    to {opacity: 0;}
-}
+    50% {
+      opacity: 0.5;
+    }
+  }
 
 
 .death {
