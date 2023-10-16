@@ -213,13 +213,27 @@ const InitialPage = () => {
         </div>
       </div>
 
+
+
       <h1
         onClick={active ? disconnect : connectMetamask}
-        style={{ color: "white", cursor: "pointer", padding: "60px" }}
+        style={{ color: "white", cursor: "pointer", marginTop: "100px" }}
       >
         {active
           ? `Connected: ${getWalletAbreviation(account)}`
           : "Connect Metamask"}
+      </h1>
+
+      <h1 onClick={() => {
+
+        if (!active) {
+          toast.error("Please connect your wallet before accessing the leaderboard");
+          return;
+        }
+
+        navigate("/leaderboard");
+      }} style={{ color: "white", cursor: "pointer", marginTop: "50px" }}>
+        Leaderboard
       </h1>
     </div>
   );
